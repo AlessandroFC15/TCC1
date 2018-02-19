@@ -1,8 +1,8 @@
+import matplotlib.pyplot as plt
+
 from algorithms.kmeans.kmeans import *
 
-mat = scipy.io.loadmat('../../database/databasez24.mat')
-
-data = mat['databasez24'][0][0][0]
+data = get_database()['database']
 
 nb = 3123
 nc = 3470
@@ -23,12 +23,12 @@ score_labels = [1 for data in total_undamaged_data] + [0 for y in damaged_data]
 
 print('>> Finding optimal K')
 # optimal_K = find_optimal_num_clusters(undamaged_data_train, data, score_labels)
-optimal_K = 3
+optimal_K = 2
 
 kmeans_results = get_kmeans_results(optimal_K, undamaged_data_train, data, score_labels)
 
 print(kmeans_results['precision'])
 
-plt.scatter(range(0, n), data[:, 0], c=kmeans_results['final_result'], s=5, cmap='viridis')
+# plt.scatter(range(0, n), data[:, 0], c=kmeans_results['final_result'], s=5, cmap='viridis')
 
 plt.show()
