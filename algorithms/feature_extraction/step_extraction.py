@@ -87,6 +87,8 @@ def feature_shm_ufpa(data, dt, limits):
 
     NPSD = psd / numpy.matlib.tile(mean_vector, (m, 1))
 
+    # return dado visto que queremos apenas verificar a performance da linha acima, não intetessando
+    # neste momento o código abaixo.
     return
 
     ANPSD = np.sum(NPSD, 2)
