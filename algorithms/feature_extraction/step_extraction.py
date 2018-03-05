@@ -85,9 +85,7 @@ def feature_shm_ufpa(data, dt, limits):
 
     mean_vector = np.sum(psd)
 
-    NPSD = psd / numpy.matlib.repmat(mean_vector, (m, 1))
-
-    print(NPSD)
+    NPSD = psd / numpy.matlib.tile(mean_vector, (m, 1))
 
     return
 
