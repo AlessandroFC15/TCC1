@@ -85,31 +85,26 @@ def feature_shm_ufpa(data, dt, limits):
 
     mean_vector = np.sum(psd)
 
-    NPSD = psd / numpy.matlib.tile(mean_vector, (m, 1))
+    # Reshape necessário para que tenha o mesmo shape que o resultado do repmat no mean_vector
+    psd = numpy.reshape(psd, (32768, 1))
 
-    # return dado visto que queremos apenas verificar a performance da linha acima, não intetessando
-    # neste momento o código abaixo.
-    return
+    NPSD = psd / numpy.matlib.repmat(mean_vector, m, 1)
 
-    ANPSD = np.sum(NPSD, 2)
-
-    print(ANPSD)
-
-    return
+    ANPSD = np.sum(NPSD, axis=1)
 
     #################################
     # Extract the natural frequencies
-    a1 = limits[0][1]
-    d1 = limits[0][2]
+    a1 = limits[0][0]
+    d1 = limits[0][1]
 
-    [a, indx] = max(abs(ANPSD[a1 - d1: a1 + d1]))
+    indx = np.argmax(abs(ANPSD[a1 - d1 - 1: a1 + d1]))
     ind = a1 - d1 + indx - 1
     freq1 = xfreq[ind]
 
-    a1 = limits[1][1]
-    d1 = limits[1][2]
+    a1 = limits[1][0]
+    d1 = limits[1][1]
 
-    [a, indx] = max(abs(ANPSD[a1 - d1: a1 + d1]))
+    indx = np.argmax(abs(ANPSD[a1 - d1 - 1: a1 + d1]))
     ind = a1 - d1 + indx - 1
     freq2 = xfreq[ind]
 
