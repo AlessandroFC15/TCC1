@@ -3,10 +3,11 @@ from __future__ import division, print_function
 import numpy as np
 import scipy.spatial.distance as distances
 import skfuzzy as fuzz
-from GMeans import GMeans
 from sklearn.cluster import DBSCAN
 from sklearn.cluster import KMeans, AffinityPropagation
 from sklearn.mixture import GaussianMixture
+
+from algoritmos_felipe.GMeans import GMeans
 
 
 class DummySubplot:
