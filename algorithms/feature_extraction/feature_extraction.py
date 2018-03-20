@@ -36,9 +36,9 @@ def extract_features(dataset_path):
     """
 
     # Qual sensor usaremos para comprimir (há 8 sensores no total).
-    # COLUNA    1   2   3   4   5   6   7   8
+    # COLUNA    0   1   2   3   4   5   6   7
     # SENSOR    3   5   6   7   10  12  14  16
-    canal = 2
+    canal = 1
 
     temp = scipy.io.loadmat(dataset_path)
 
