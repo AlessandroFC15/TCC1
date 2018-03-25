@@ -133,9 +133,14 @@ class DBSCAN_Center(DamageDetection):
         # CALCULAR CENTROS
 
         labels = np.unique(db.labels_)
+
         max_label = max(labels)
+
         centers = np.zeros((max_label + 1, 2))
-        for i in range(max_label + 1):
+
+        # print(centers)
+
+        for i in range(len(labels) - 1):
             if max_label == 0 and len(labels) == 1:
                 indices = np.argwhere(db.labels_ == labels[i]).T[0]
             else:
@@ -213,7 +218,7 @@ class Affinity_Propagation(DamageDetection):
 
 # FUNCIONANDO_TESTE/LIMPO
 class GMM(DamageDetection):
-    def __init__(self, n_components):
+    def __init__(self, n_components=1):
         super().__init__()
         self.n_components = n_components
 

@@ -1,0 +1,37 @@
+>> 5% missing data | 5 iterations <<
+
+# KMeans | 2 clusters
+{'sum_error_type_2': 13.8, 'sum_error_type_1': 13.4, 'sum_UCL': 0.2916794307895348}
+
+# KMeans | 3 clusters
+{'sum_error_type_2': 13.8, 'sum_error_type_1': 14.4, 'sum_UCL': 0.21821177264493033}
+
+# KMeans | 4 clusters
+{'sum_error_type_2': 14.2, 'sum_error_type_1': 13.0, 'sum_UCL': 0.16784743022714238}
+
+# KMeans | 5 clusters
+{'sum_error_type_2': 14.4, 'sum_error_type_1': 15.6, 'sum_UCL': 0.1415910479244366}
+
+# Fuzzy_C_Means | 2 clusters
+{'sum_error_type_2': 17.2, 'sum_error_type_1': 12.4, 'sum_UCL': 0.30650214796796554}
+
+# Fuzzy_C_Means | 3 clusters
+{'sum_error_type_2': 19.4, 'sum_error_type_1': 11.6, 'sum_UCL': 0.2574728076725007}
+
+# Fuzzy_C_Means | 4 clusters
+{'sum_error_type_2': 16.6, 'sum_error_type_1': 11.8, 'sum_UCL': 0.21145286789865386}
+
+# Fuzzy_C_Means | 5 clusters
+{'sum_error_type_2': 14.8, 'sum_error_type_1': 13.8, 'sum_UCL': 0.18071780861520936}
+
+# DBSCAN_Center
+{'sum_error_type_2': 32.6, 'sum_error_type_1': 6.0, 'sum_UCL': 7.611156259653287}
+
+# Affinity_Propagation
+{'sum_error_type_2': 11.8, 'sum_error_type_1': 18.8, 'sum_UCL': 0.10534198728711623}
+
+# GMM
+{'sum_error_type_2': 33.2, 'sum_error_type_1': 8.0, 'sum_UCL': 0.6334511812424077}
+
+# G_Means
+{'sum_error_type_2': 10.4, 'sum_error_type_1': 15.2, 'sum_UCL': 0.2570318717189959}
