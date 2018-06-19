@@ -86,7 +86,7 @@ def feature_shm_ufpa(data, dt, limits):
     mean_vector = np.sum(psd)
 
     # Reshape necessário para que tenha o mesmo shape que o resultado do repmat no mean_vector
-    psd = numpy.reshape(psd, (32768, 1))
+    psd = numpy.reshape(psd, (m, 1))
 
     NPSD = psd / numpy.matlib.repmat(mean_vector, m, 1)
 

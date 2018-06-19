@@ -1,20 +1,28 @@
+import numpy as np
 import random
 import scipy.io
 
 from algorithms.feature_extraction.step_extraction import step_extraction
 
 
-def realizar_amputacao_dados(data, missing_data_percentage):
+def simulate_missing_data(data, missing_data_percentage):
     num_samples_to_be_removed = round(len(data) * (missing_data_percentage / 100))
 
     new_database = list(data)
 
     for i in range(0, num_samples_to_be_removed):
-        rand_num = random.randint(0, len(new_database) - 1)
+        while True:
+            rand_num = random.randint(0, len(new_database) - 1)
 
-        del new_database[rand_num]
+            if not np.isnan(new_database[rand_num]):
+                new_database[rand_num] = np.NaN
+                break
 
     return new_database
+
+
+def realizar_amputacao_dados(data):
+    return [x for x in data if not np.isnan(x)]
 
 
 def normalize_var(array, x, y):
@@ -39,7 +47,7 @@ def normalize_var(array, x, y):
     return normalized
 
 
-def extract_features(dataset_path, missing_data_percentage=0):
+def extract_features(dataset_path, missing_data_percentage=0, imputation_strategy=None):
     """
         %% Stand-alone Feature Extraction
         % Extrai as features do sinal original e aproximado. Sendo que o sinal
@@ -65,7 +73,12 @@ def extract_features(dataset_path, missing_data_percentage=0):
     # Normalização. (Let's hope this won't break the script).
     dataset_orig = normalize_var(dataset_orig, -1, 1)
 
-    dataset_orig = realizar_amputacao_dados(dataset_orig, missing_data_percentage)
+    dataset_missing_data = simulate_missing_data(dataset_orig, missing_data_percentage)
+
+    if imputation_strategy:
+        dataset_orig = imputation_strategy.impute_data(dataset_missing_data)
+    else:
+        dataset_orig = realizar_amputacao_dados(dataset_missing_data)
 
     # Extrai as features do sinal original.
     feat_vector_orig = step_extraction(dataset_orig, 1)
