@@ -1,10 +1,12 @@
 from __future__ import division, print_function
 
+import matplotlib.pyplot as plt
 import numpy as np
 import scipy.spatial.distance as distances
 import skfuzzy as fuzz
 from sklearn.cluster import DBSCAN
 from sklearn.cluster import KMeans, AffinityPropagation
+from sklearn.metrics import calinski_harabaz_score
 from sklearn.mixture import GaussianMixture
 
 from algoritmos_felipe.GMeans import GMeans
@@ -65,13 +67,37 @@ class DamageDetection:
 
 # FUNCIONANDO_TESTE/LIMPO/
 class K_Means(DamageDetection):
-    def __init__(self, number_of_clusters):
+    def __init__(self, number_of_clusters=None):
         super().__init__()
         self.number_of_clusters = number_of_clusters
 
+    @staticmethod
+    def find_optimal_K(training_data, min_number_of_clusters, max_number_of_clusters):
+        max_calinski_harabaz = {
+            'num_clusters': 0,
+            'score': -1
+        }
+
+        for i in range(min_number_of_clusters, max_number_of_clusters + 1):
+            kmeans = KMeans(n_clusters=i, random_state=0).fit(training_data)
+
+            score = calinski_harabaz_score(training_data, kmeans.labels_)
+
+            if score >= max_calinski_harabaz['score']:
+                max_calinski_harabaz['num_clusters'] = i
+                max_calinski_harabaz['score'] = score
+
+        return max_calinski_harabaz['num_clusters']
+
     def train_and_test(self, training_data, test_data, break_point):
+        if not self.number_of_clusters:
+            self.number_of_clusters = K_Means.find_optimal_K(training_data, min_number_of_clusters=2,
+                                                             max_number_of_clusters=11)
+
         # Aplica o KMEANS na base de dados de treino
         kmeans = KMeans(n_clusters=self.number_of_clusters, random_state=0).fit(training_data)
+
+        # self.plot_clusters(kmeans, training_data)
 
         # ACHAR MENORES DISTANCIAS PARA OS DADOS DE TREINO
         train_dist = kmeans.transform(training_data)
@@ -92,14 +118,43 @@ class K_Means(DamageDetection):
 
         self._set_resulting_parameters()
 
+    def plot_clusters(self, kmeans_model, train_data):
+        labels = kmeans_model.labels_
+
+        plt.scatter(range(0, len(train_data)), train_data[:, 0], c=labels, s=20, cmap='viridis')
+        plt.show()
 
 # FUNCIONANDO_TESTE/LIMPO
 class Fuzzy_C_Means(DamageDetection):
-    def __init__(self, number_of_clusters):
+    def __init__(self, number_of_clusters=None):
         super().__init__()
         self.number_of_clusters = number_of_clusters
 
+    @staticmethod
+    def find_optimal_K(training_data, min_number_of_clusters, max_number_of_clusters):
+        max_calinski_harabaz = {
+            'num_clusters': 0,
+            'score': -1
+        }
+
+        for i in range(min_number_of_clusters, max_number_of_clusters + 1):
+            cntr, u, u0, d, jm, p, fpc = fuzz.cluster.cmeans(training_data.T, i, 5, error=0.005, maxiter=1000,
+                                                             init=None, seed=1)
+
+            cluster_membership = np.argmax(u, axis=0)
+
+            score = calinski_harabaz_score(training_data, cluster_membership)
+
+            if score >= max_calinski_harabaz['score']:
+                max_calinski_harabaz['num_clusters'] = i
+                max_calinski_harabaz['score'] = score
+
+        return max_calinski_harabaz['num_clusters']
+
     def train_and_test(self, training_data, test_data, break_point):
+        if not self.number_of_clusters:
+            self.number_of_clusters = Fuzzy_C_Means.find_optimal_K(training_data, 2, 11)
+
         cntr, u, _, d, _, _, fpc = fuzz.cluster.cmeans(
             training_data.T, self.number_of_clusters, 5, error=0.005, maxiter=1000, init=None, seed=1)
 
