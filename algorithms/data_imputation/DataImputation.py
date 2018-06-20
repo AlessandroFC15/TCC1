@@ -15,6 +15,16 @@ class MeanImputation:
         return df[0].values.tolist()
 
 
+class InterpolationImputation:
+    description = 'Interpolation_Imputation'
+
+    @staticmethod
+    def impute_data(data):
+        s = pd.Series(data)
+
+        return s.interpolate().tolist()
+
+
 class KNNImputation:
     description = 'KNN_Imputation'
 
