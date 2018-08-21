@@ -67,6 +67,9 @@ class DamageDetection:
 
 # FUNCIONANDO_TESTE/LIMPO/
 class K_Means(DamageDetection):
+    name = 'K-Means'
+    sigla = 'K-Means'
+
     def __init__(self, number_of_clusters=None):
         super().__init__()
         self.number_of_clusters = number_of_clusters
@@ -126,6 +129,9 @@ class K_Means(DamageDetection):
 
 # FUNCIONANDO_TESTE/LIMPO
 class Fuzzy_C_Means(DamageDetection):
+    name = 'Fuzzy_C_Means'
+    sigla = 'FCM'
+
     def __init__(self, number_of_clusters=None):
         super().__init__()
         self.number_of_clusters = number_of_clusters
@@ -177,6 +183,9 @@ class Fuzzy_C_Means(DamageDetection):
 
 # FUNCIONANDO_TESTE/LIMPO
 class DBSCAN_Center(DamageDetection):
+    name = 'DBSCAN_Center'
+    sigla = "DSCAN"
+
     def __init__(self, eps, min_points):
         super().__init__()
         self.eps = eps
@@ -237,6 +246,9 @@ class DBSCAN_Center(DamageDetection):
 
 # FUNCIONANDO_TESTE/LIMPO
 class Affinity_Propagation(DamageDetection):
+    name = 'Affinity_Propagation'
+    sigla = 'AP'
+
     def __init__(self):
         super().__init__()
 
@@ -308,6 +320,9 @@ class GMM(DamageDetection):
 
 
 class G_Means(DamageDetection):
+    name = 'G_Means'
+    sigla = 'G-Means'
+
     def __init__(self):
         super().__init__()
 

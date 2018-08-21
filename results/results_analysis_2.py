@@ -3,7 +3,7 @@ import pandas as pd
 
 df_amputation = pd.read_csv('/home/alessandro/Documentos/Programming/Projects/TCC1/results/new_results.csv')
 df_imputation = pd.read_csv(
-    '/home/alessandro/Documentos/Programming/Projects/TCC1/results/imputation/results_Mean_Imputation.csv')
+    '/home/alessandro/Documentos/Programming/Projects/TCC1/results/imputation/results_imputation.csv')
 
 # list_algorithms = ['K-Means', 'Fuzzy_C_Means', 'Affinity_Propagation', 'GMM', 'G_Means']
 list_algorithms = ['K-Means', 'Fuzzy_C_Means', 'Affinity_Propagation', 'GMM', 'G_Means', 'DBSCAN_Center']

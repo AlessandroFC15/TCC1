@@ -5,7 +5,8 @@ import time
 import os
 import re
 
-from algorithms.feature_extraction.feature_extraction import extract_features
+from algorithms.feature_extraction.feature_extraction import extract_features, extract_features_for_knn
+from algorithms.data_imputation.DataImputation import KNNImputation
 
 
 def save_features_to_csv_file(missing_data_percentage, num_iterations=1, imputation_strategy=None):
@@ -15,15 +16,21 @@ def save_features_to_csv_file(missing_data_percentage, num_iterations=1, imputat
     files = [f for f in os.listdir(files_directory) if re.match(r'.*_12\.mat', f)]
     files.sort()
 
+    print('len(files)')
+    print(len(files))
+
     for i in range(num_iterations):
         t0 = time.time()
 
         extracted_data = []
 
-        for j, filename in enumerate(files):
-            print('#{} | {} | Extracting {} ...'.format(i + 1, j + 1, filename))
-            extracted_data.append(
-                extract_features(files_directory + filename, missing_data_percentage, imputation_strategy))
+        if imputation_strategy == KNNImputation:
+            print('# Iteration {} | {}%'.format(i + 1, missing_data_percentage))
+            extracted_data = extract_features_for_knn(missing_data_percentage, files)
+        else:
+            for j, filename in enumerate(files):
+                print('#{} | {} | Extracting {} ...'.format(i + 1, j + 1, filename))
+                extracted_data.append(extract_features(files_directory + filename, missing_data_percentage, imputation_strategy))
 
         print(">> Criando arquivo csv...")
 

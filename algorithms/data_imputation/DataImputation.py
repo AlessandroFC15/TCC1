@@ -5,6 +5,7 @@ from fancyimpute import KNN
 
 class MeanImputation:
     description = 'Mean_Imputation'
+    descricao = "Média"
 
     @staticmethod
     def impute_data(data):
@@ -17,36 +18,47 @@ class MeanImputation:
 
 class InterpolationImputation:
     description = 'Interpolation_Imputation'
+    descricao = 'Interpolação'
 
     @staticmethod
     def impute_data(data):
         s = pd.Series(data)
 
-        return s.interpolate().tolist()
+        # interpolation_result = s.interpolate().dropna().tolist()
+        interpolation_result = s.interpolate(limit_direction='both').tolist()
+
+        return interpolation_result
 
 
 class KNNImputation:
-    description = 'KNN_Imputation'
+    description = 'KNN_Imputation_N_3'
+    descricao = 'KNN'
 
     @staticmethod
-    def impute_data(data, original_data):
-        matrix = [data]
+    def impute_data(data):
+        print('# imputing data KNN')
+        full_data = KNN(k=3).complete(data)
 
-        for i in range(0, 250):
-            matrix.append(original_data)
-
-        full_data = KNN().complete(matrix)
-
-        print(full_data)
         return full_data
 
 
-        # class MICEImputation:
-        #     description = 'MICE_Imputation'
-        #
-        #     @staticmethod
-        #     def impute_data(data):
-        #         full_data = IterativeSVD(gradual_rank_increase=False).complete(np.matrix([data]))
-        #
-        #         print(full_data)
-        #         return full_data
+class KNNImputation_7:
+    description = 'KNN_Imputation_N_7'
+
+    @staticmethod
+    def impute_data(data):
+        print('# imputing data KNN')
+        full_data = KNN(k=7).complete(data)
+
+        return full_data
+
+
+# class MICEImputation:
+#     description = 'MICE_Imputation'
+#
+#     @staticmethod
+#     def impute_data(data):
+#         full_data = IterativeSVD(gradual_rank_increase=False).complete(np.matrix([data]))
+#
+#         print(full_data)
+#         return full_data

@@ -1,7 +1,8 @@
 import numpy as np
 import pandas as pd
-
+from algorithms.feature_extraction.full_database_feature_extraction import save_features_to_csv_file
 from algoritmos_felipe.DamageDetection import *
+from algorithms.data_imputation.DataImputation import MeanImputation, InterpolationImputation, KNNImputation
 
 
 def get_average_results(algorithm, missing_data_percentage, num_iterations, imputation_method=None):
@@ -40,7 +41,7 @@ def get_average_results(algorithm, missing_data_percentage, num_iterations, impu
 def get_extracted_data(missing_data_percentage, iteration_number, imputation_method=None):
     if imputation_method:
         filename = '/home/alessandro/Documentos/Programming/Projects/TCC1/algorithms/features/{}/' \
-                   'Features_Originais_Hora_12_Sensor_5_MDP_{}_{}.csv'.format(imputation_method.description,
+                   'Features_Originais_Hora_12_Sensor_5_MDP_{}_{}.csv'.format(imputation_method,
                                                                               missing_data_percentage, iteration_number)
     else:
         filename = '/home/alessandro/Documentos/Programming/Projects/TCC1/algorithms/features/' \
@@ -53,10 +54,12 @@ def get_extracted_data(missing_data_percentage, iteration_number, imputation_met
     return data
 
 
-list_missing_data_percentage = [5, 7, 10, 15]
+# list_missing_data_percentage = [5, 7, 10, 15, 20, 25, 35, 50, 60, 70, 80]
+list_missing_data_percentage = [25]
 
 results = {
     'algorithm': [],
+    # 'imputation_method': [],
     'missing_data_percentage': [],
     'error_type_I': [],
     'error_type_II': [],
@@ -64,15 +67,17 @@ results = {
     'true_negatives': [],
 }
 
-# imputation_strategy = DataImputation.MeanImputation
-imputation_strategy = None
+imputation_strategy = KNNImputation
+# imputation_strategies = ['Mean_Imputation', 'Interpolation_Imputation', 'KNN_Imputation_N_3']
+imputation_strategies = []
+# imputation_strategies = ['Interpolation_Imputation']
 
 for missing_data_percentage in list_missing_data_percentage:
-    num_iterations = 25
+    num_iterations = 20
 
     print(">> {}% missing data | {} iterations <<\n".format(missing_data_percentage, num_iterations))
 
-    # save_features_to_csv_file(missing_data_percentage, num_iterations, imputation_strategy)
+    save_features_to_csv_file(missing_data_percentage, num_iterations, imputation_strategy)
 
     algorithms = [
         {'description': 'K-Means',
@@ -94,13 +99,16 @@ for missing_data_percentage in list_missing_data_percentage:
          'algorithm': G_Means()},
     ]
 
+    # for imputation_strategy in imputation_strategies:
     for alg in algorithms:
-        print("# " + alg['description'])
+        # print("# {} | {}".format(alg['description'], imputation_strategy))
+        print("# {}".format(alg['description']))
 
-        average_results = get_average_results(alg['algorithm'], missing_data_percentage, num_iterations,
-                                              imputation_strategy)
+        # average_results = get_average_results(alg['algorithm'], missing_data_percentage, num_iterations, imputation_strategy)
+        average_results = get_average_results(alg['algorithm'], missing_data_percentage, num_iterations)
 
         results['algorithm'].append(alg['description'])
+        # results['imputation_method'].append(imputation_strategy)
         results['missing_data_percentage'].append(missing_data_percentage)
         results['error_type_I'].append(average_results['error_type_1'])
         results['error_type_II'].append(average_results['error_type_2'])
@@ -117,10 +125,13 @@ df = pd.DataFrame(results)
 
 print(df)
 
-if imputation_strategy:
+if imputation_strategies:
     results_filename = '/home/alessandro/Documentos/Programming/Projects/TCC1/results/imputation/' \
-                       'results_{}.csv'.format(imputation_strategy.description)
+                       'results_imputation_valendo.csv'
 else:
     results_filename = '/home/alessandro/Documentos/Programming/Projects/TCC1/results/new_results_3.csv'
 
+# results_filename = '/home/alessandro/Documentos/Programming/Projects/TCC1/results/complete_results_amputation.csv'
+
+# df.to_csv(results_filename, mode='a', header=False, index=False)
 df.to_csv(results_filename)

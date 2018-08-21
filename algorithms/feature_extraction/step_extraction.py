@@ -118,7 +118,7 @@ def step_extraction(data, col):
     STEP_EXTRACTION Etapa de extração de features.
 
 %   São utilizadas 3 features do sinal para a detecção de danos:
-%   As duas primeiras são a Primeira e Terceira Frequência Natural (F1 e
+%   As duas primeiras são a Primeira e  Terceira Frequência Natural (F1 e
 %   F3, respectivamente).
 %   A terceira consiste na quantidade de energia presente na segunda metade
 %   do espectro.

@@ -1,0 +1,4 @@
+	,imputation_method,mean_squared_error,missing_data_percentage,root_mean_squared_error
+0,Interpolation_Imputation,0.0004570610179766724,5,0.021378985429076666
+0,Interpolation_Imputation,0.0003799092017472422,5,0.019491259624437877
+0,Interpolation_Imputation,0.00037104196299842494,5,0.01926244955862117
