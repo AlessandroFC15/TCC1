@@ -38,7 +38,11 @@ class DamageDetection:
         lv = 0.95
         n = len(self.DIs)
 
+        # print('DIs')
+        # print(self.DIs)
+
         UCL = self._train_DIs[int(np.floor(len(self._train_DIs) * lv))]
+
         flag = np.zeros(n, dtype=bool)
         flag[self._data_break_point:] = 1
 

@@ -3,6 +3,8 @@ import pandas as pd
 from algorithms.feature_extraction.full_database_feature_extraction import save_features_to_csv_file
 from algoritmos_felipe.DamageDetection import *
 from algorithms.data_imputation.DataImputation import MeanImputation, InterpolationImputation, KNNImputation
+from algorithms.constants import FEATURES_DIRECTORY, RESULTS_DIRECTORY
+import json
 
 
 def get_average_results(algorithm, missing_data_percentage, num_iterations, imputation_method=None):
@@ -30,6 +32,7 @@ def get_average_results(algorithm, missing_data_percentage, num_iterations, impu
             results['error_type_2'] += algorithm.err[1]
             results['true_positives'] += len([x for x in algorithm.class_states if x == 1])
             results['true_negatives'] += len([x for x in algorithm.class_states if x == 2])
+            results['DIs'] = algorithm.DIs
         except Exception as e:
             invalid_iterations += 1
             print(e)
@@ -40,12 +43,11 @@ def get_average_results(algorithm, missing_data_percentage, num_iterations, impu
 
 def get_extracted_data(missing_data_percentage, iteration_number, imputation_method=None):
     if imputation_method:
-        filename = '/home/alessandro/Documentos/Programming/Projects/TCC1/algorithms/features/{}/' \
+        filename = FEATURES_DIRECTORY + '/{}/' \
                    'Features_Originais_Hora_12_Sensor_5_MDP_{}_{}.csv'.format(imputation_method,
                                                                               missing_data_percentage, iteration_number)
     else:
-        filename = '/home/alessandro/Documentos/Programming/Projects/TCC1/algorithms/features/' \
-                   'Features_Originais_Hora_12_Sensor_5_MDP_{}_{}.csv'.format(missing_data_percentage, iteration_number)
+        filename = FEATURES_DIRECTORY + '/Features_Originais_Hora_12_Sensor_5_MDP_{}_{}.csv'.format(missing_data_percentage, iteration_number)
 
     data = np.genfromtxt(filename, delimiter=',')
 
@@ -55,7 +57,7 @@ def get_extracted_data(missing_data_percentage, iteration_number, imputation_met
 
 
 # list_missing_data_percentage = [5, 7, 10, 15, 20, 25, 35, 50, 60, 70, 80]
-list_missing_data_percentage = [25]
+list_missing_data_percentage = [0]
 
 results = {
     'algorithm': [],
@@ -67,22 +69,25 @@ results = {
     'true_negatives': [],
 }
 
-imputation_strategy = KNNImputation
+# imputation_strategy = KNNImputation
+imputation_strategy = None
 # imputation_strategies = ['Mean_Imputation', 'Interpolation_Imputation', 'KNN_Imputation_N_3']
 imputation_strategies = []
 # imputation_strategies = ['Interpolation_Imputation']
 
+dict_DIs = {}
+
 for missing_data_percentage in list_missing_data_percentage:
-    num_iterations = 20
+    num_iterations = 1
 
     print(">> {}% missing data | {} iterations <<\n".format(missing_data_percentage, num_iterations))
 
-    save_features_to_csv_file(missing_data_percentage, num_iterations, imputation_strategy)
+    # save_features_to_csv_file(missing_data_percentage, num_iterations, imputation_strategy)
 
     algorithms = [
         {'description': 'K-Means',
          'algorithm': K_Means()},
-
+        #
         {'description': 'Fuzzy_C_Means',
          'algorithm': Fuzzy_C_Means()},
 
@@ -114,6 +119,9 @@ for missing_data_percentage in list_missing_data_percentage:
         results['error_type_II'].append(average_results['error_type_2'])
         results['true_positives'].append(average_results['true_positives'])
         results['true_negatives'].append(average_results['true_negatives'])
+        results['true_negatives'].append(average_results['true_negatives'])
+
+        dict_DIs[alg['description']] = average_results['DIs'].tolist()
 
         print(average_results)
         print()
@@ -121,17 +129,22 @@ for missing_data_percentage in list_missing_data_percentage:
 # plt.legend()
 # plt.show()
 
-df = pd.DataFrame(results)
+# df = pd.DataFrame(results)
 
-print(df)
+# print(df)
 
-if imputation_strategies:
-    results_filename = '/home/alessandro/Documentos/Programming/Projects/TCC1/results/imputation/' \
-                       'results_imputation_valendo.csv'
-else:
-    results_filename = '/home/alessandro/Documentos/Programming/Projects/TCC1/results/new_results_3.csv'
+results_filename = RESULTS_DIRECTORY
 
-# results_filename = '/home/alessandro/Documentos/Programming/Projects/TCC1/results/complete_results_amputation.csv'
+with open(results_filename + '/DIs.json', 'w') as fp:
+    json.dump(dict_DIs, fp)
 
-# df.to_csv(results_filename, mode='a', header=False, index=False)
-df.to_csv(results_filename)
+
+# if imputation_strategies:
+#     results_filename += '/results_imputation_valendo.csv'
+#
+# else:
+#     results_filename += '/new_results_artigo.csv'
+# # results_filename = '/home/alessandro/Documentos/Programming/Projects/TCC1/results/complete_results_amputation.csv'
+#
+# # df.to_csv(results_filename, mode='a', header=False, index=False)
+# df.to_csv(results_filename)

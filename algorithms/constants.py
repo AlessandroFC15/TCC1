@@ -1,0 +1,2 @@
+FEATURES_DIRECTORY = "/home/alessandro/Documentos/Backups/alessandro/Programming/Projects/TCC1/algorithms/features"
+RESULTS_DIRECTORY = "/home/alessandro/Documentos/Backups/alessandro/Programming/Projects/TCC1/results"

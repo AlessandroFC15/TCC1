@@ -68,7 +68,7 @@ Send2Trash==1.4.2
 simplegeneric==0.8.1
 six==1.11.0
 sklearn==0.0
-smop==0.0.0
+smop
 sympy==1.1.1
 tensorboard==1.8.0
 tensorflow==1.8.0
