@@ -1,9 +1,10 @@
 import numpy as np
 import pandas as pd
+from algorithms.feature_extraction.feature_extraction import get_extracted_data
 from algorithms.feature_extraction.full_database_feature_extraction import save_features_to_csv_file
 from algoritmos_felipe.DamageDetection import *
 from algorithms.data_imputation.DataImputation import MeanImputation, InterpolationImputation, KNNImputation
-from algorithms.constants import FEATURES_DIRECTORY, RESULTS_DIRECTORY
+from algorithms.constants import RESULTS_DIRECTORY
 import json
 
 
@@ -39,21 +40,6 @@ def get_average_results(algorithm, missing_data_percentage, num_iterations, impu
 
     print('Invalid iterations: {}'.format(invalid_iterations))
     return {key: value / (num_iterations - invalid_iterations) for key, value in results.items()}
-
-
-def get_extracted_data(missing_data_percentage, iteration_number, imputation_method=None):
-    if imputation_method:
-        filename = FEATURES_DIRECTORY + '/{}/' \
-                   'Features_Originais_Hora_12_Sensor_5_MDP_{}_{}.csv'.format(imputation_method,
-                                                                              missing_data_percentage, iteration_number)
-    else:
-        filename = FEATURES_DIRECTORY + '/Features_Originais_Hora_12_Sensor_5_MDP_{}_{}.csv'.format(missing_data_percentage, iteration_number)
-
-    data = np.genfromtxt(filename, delimiter=',')
-
-    # Pegando apenas as frequências
-    data = data[:, [0, 1]]
-    return data
 
 
 # list_missing_data_percentage = [5, 7, 10, 15, 20, 25, 35, 50, 60, 70, 80]

@@ -6,6 +6,22 @@ import os
 import re
 from algorithms.feature_extraction.step_extraction import step_extraction
 from algorithms.data_imputation.DataImputation import KNNImputation
+from algorithms.constants import FEATURES_DIRECTORY
+
+
+def get_extracted_data(missing_data_percentage, iteration_number, imputation_method=None):
+    if imputation_method:
+        filename = FEATURES_DIRECTORY + '/{}/' \
+                   'Features_Originais_Hora_12_Sensor_5_MDP_{}_{}.csv'.format(imputation_method.description,
+                                                                              missing_data_percentage, iteration_number)
+    else:
+        filename = FEATURES_DIRECTORY + '/Features_Originais_Hora_12_Sensor_5_MDP_{}_{}.csv'.format(missing_data_percentage, iteration_number)
+
+    data = np.genfromtxt(filename, delimiter=',')
+
+    # Pegando apenas as frequências
+    data = data[:, [0, 1]]
+    return data
 
 
 def simulate_missing_data(data, missing_data_percentage):
